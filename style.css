@@ -49,6 +49,7 @@ z-index: 1000;
 
 #graph {
 	box-sizing: border-box;
+	fill: "white";
 	/*border-style: solid;
 	border-width:3px;*/
 	padding:0;
