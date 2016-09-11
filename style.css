@@ -1,6 +1,7 @@
 
 body {
 	font-family: 'Roboto', sans-serif;
+	background-color: #BDBDBD;
 }
 
 #header {
@@ -8,11 +9,13 @@ width: 100%;
 position: fixed;
 top:0px;
 left:0px;
-border-style: solid;
-background-color: black;
+/*border-style: solid;*/
+background-color: #212121;
 box-sizing: border-box;
 padding:10px;
 z-index: 1000;
+display: flex;
+justify-content: center;
 }
 
 #header > *{
@@ -26,19 +29,34 @@ z-index: 1000;
 
 }
 
+.intro{
+	display: flex;
+	justify-content: center;
+}
+
+.introtext{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
 #container {
 	width:100%;
 	position: relative;
 	/*border-width: 3px;
 	border-style: solid;*/
 	box-sizing: border-box;
-	padding-top: 1000px;
+	padding-top: 800px;
 	border-color: red;
 	margin-bottom:1000px;
+	padding-left:50px;
 }
 
+
+
 .section{
-	margin-bottom: 1000px;
+	
+	margin-bottom: 400px;
 	opacity: 0.5;
 }
 
@@ -49,10 +67,11 @@ z-index: 1000;
 
 #graph {
 	box-sizing: border-box;
-	background-color: white;
 	/*border-style: solid;
 	border-width:3px;*/
 	padding:0;
+	background-color: white;
+	background-color: #F5F5F5;
 }
 
 /*#thresholdTop, #thresholdBottom {
@@ -77,7 +96,7 @@ z-index: 1000;
 
 .line {
   fill: none;
-  stroke: steelblue;
+  stroke: black;
   stroke-width: 1.5px;
 }
 .circle {
