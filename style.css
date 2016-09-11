@@ -46,10 +46,15 @@ justify-content: center;
 	/*border-width: 3px;
 	border-style: solid;*/
 	box-sizing: border-box;
-	padding-top: 800px;
+	padding-top: 1000px;
 	border-color: red;
 	margin-bottom:1000px;
 	padding-left:50px;
+}
+
+#contacts{
+	display: flex;
+	justify-content: center;
 }
 
 
