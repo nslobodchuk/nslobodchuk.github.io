@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	</head>
+<body>
+<button id="window">Окно</button>
+<div id = "form">
+<div>
+<input type="text" id="name" value="Иван"/>
+</div>
+<div>
+<input type="text" id="lastName" />
+</div>
+<div>
+<input type="text" id="mail"/>
+</div>
+<div>
+<button id="save">Сохранить</button>
+</div>
+
+
+<div id="result">
+
+	<p id="inf"><i class="fa fa-info-circle" aria-hidden="true" ></i> Данные успешно изменены.</p>
+	<p id="err"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Ошибочка. Нажмите сохранить еще раз, чтобы подбросить монетку.</p>
+
+	<button id="ok">OK</button>
+
+
+
+</div>
+</div>
+</body>
+
+<script>
+
+document.getElementById("form").style.display="none";
+document.getElementById("result").style.display="none";
+
+document.getElementById("window").addEventListener('click', function (evt) {
+    document.getElementById("form").style.display==="none"?document.getElementById("form").style.display=null:document.getElementById("form").style.display="none";
+});
+
+
+var error;
+
+document.getElementById("save").addEventListener('click', function (evt) {
+    if (!document.getElementById("mail").value.match(/@/)) {alert("Invalid Email")}
+    	else {
+
+    		document.getElementById("result").style.display=null;
+
+    Math.random()>0.5?error=1:error=0;
+
+
+    if(error){
+    	document.getElementById("inf").style.display="none";
+    	document.getElementById("err").style.display=null;
+    } else {
+    	document.getElementById("inf").style.display=null;
+    	document.getElementById("err").style.display="none";
+    }
+
+    	};
+
+    
+});
+
+document.getElementById("ok").addEventListener('click', function (evt) {
+
+	if(!error){document.getElementById("result").style.display="none";};
+
+	});
+
+
+var request = new XMLHttpRequest();
+
+request.open("GET", "https://raw.githubusercontent.com/nslobodchuk/nslobodchuk.github.io/master/response.txt");
+
+request.setRequestHeader("Content-Type", "text/plain");
+
+request.send(null);
+
+request.onreadystatechange = function() {
+if (request.readyState === 4 && request.status === 200) {
+
+var response = JSON.parse(request.responseText);
+document.getElementById("name").value=response.data.firstName;
+document.getElementById("lastName").value=response.data.lastName;
+document.getElementById("mail").value=response.data.mail;
+
+
+}
+};
+
+
+
+</script>
