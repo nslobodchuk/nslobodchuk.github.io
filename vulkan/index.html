@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Динамика публикаций</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style media="screen">
+      /* Custom page CSS */
+      .container {
+      width: auto;
+      max-width: 680px;
+      padding: 0 15px;
+      }
+      .container .text-muted {
+      margin: 20px 0;
+      }
+
+      /* d3 */
+      #mainline {
+          stroke: steelblue;
+          stroke-width: 2;
+          fill: none;
+      }
+
+      line {
+          stroke: black;
+      }
+
+      text {
+          font-family: Arial;
+          font-size: 9pt;
+      }
+
+      .svg-container {
+          display: inline-block;
+          position: relative;
+          width: 100%;
+          padding-bottom: 100%; /* aspect ratio */
+          vertical-align: top;
+          overflow: hidden;
+      }
+      .svg-content-responsive {
+          display: inline-block;
+          position: absolute;
+          top: 10px;
+          left: 0;
+      }
+
+      #info{
+        color: red;
+      }
+
+      .axis path{
+        stroke: black;
+        stroke-width:1;
+      }
+
+      .interval{
+        border: solid;
+        padding: 3px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .interval.active{
+        color: #E91E63;
+      }
+
+      .interval:hover{
+        color: #E91E63;
+      }
+
+      .loadingMessage{
+        position: fixed;
+        top:0px;
+        left:0px;
+        width:100%;
+        height:100%;
+        background: grey;
+        opacity: 0.5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .loadingMessage>div{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+
+
+      .polygons {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus{
+  fill: #E91E63;
+}
+
+.focus text{
+  fill: black;
+}
+
+#user-info{
+  display:flex;
+  justify-content: center;
+}
+
+
+
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h3>Динамика публикаций пользователя</h3>
+      </div>
+      <p class="input">
+        <input type="id" class="form-control" id="owner_id"
+        placeholder="Введите идентификатор пользователя">
+      </p>
+      <p>Выберите временную шкалу: <span class="active interval" id="interval-day">День</span> 
+        <span class="interval" id="interval-week">Неделя</span> 
+        <span class="interval" id="interval-4weeks">4 недели</span>
+      </p>
+      <p id="info"></p>
+      <div class="jumbotron">
+      </div>
+    </div>
+
+    <script src="http://d3js.org/d3.v4.min.js"></script>
+    <script src="jsonp.js"></script>
+    <script>
+
+
+function Chart() {
+
+
+  this.interval = "day";
+
+  this.response = null;
+
+  d3.select("#interval-day").on('click', handleIntervalClick.bind(this, "day"));
+  d3.select("#interval-week").on('click', handleIntervalClick.bind(this, "week"));
+  d3.select("#interval-4weeks").on('click', handleIntervalClick.bind(this, "4weeks"));
+
+  function handleIntervalClick (interval) {
+
+    this.interval = interval;
+
+    d3.selectAll(".interval").classed('active', false);
+    d3.select("#interval-"+interval).classed('active', true);
+
+    this.updateChart();
+
+  }
+
+};
+
+Chart.prototype = 
+{
+
+  appendInfo: function(e) {
+
+    d3.select("#info").text(e);
+  },
+
+  processUserData: function(response){
+   this.image
+    .attr('href', response.response[0].photo_400_orig);
+
+    this.userInfo.text(response.response[0].first_name+" "+response.response[0].last_name);
+
+
+    console.log(response)
+  },
+
+  _draw: function(user){
+
+    var self = this;
+
+    var margin = 40,
+    padding = 0.2*margin,
+    w = 600 - margin*2,
+    h = 400 - margin*2;
+
+    var userInfo = d3.select(".jumbotron").append('div').attr('id', 'user-info').append('h3');
+
+    self.userInfo = userInfo;
+
+    var g0 = d3.select(".jumbotron")
+        .append("div")
+        .classed("svg-container", true) //container class to make it responsive
+        .append("svg")
+        //responsive SVG needs these 2 attributes and no width and height attr
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 600 400")
+        //class to make it responsive
+        .classed("svg-content-responsive", true)
+        .append("g")
+        .attr("transform", "translate("+margin+","+ margin+")");
+
+        self.image = g0.append('image')
+        .attr('height', h)
+        .attr('width', w)
+        .style('opacity', 0.2);
+
+        var g = g0.append('g').attr('id', 'chart').style('visibility', null);
+
+        self.g0= g0;
+        self.g = g;
+
+        
+
+
+
+getJSONP("https://api.vk.com/method/wall.get?owner_id="+user+"&v=5.57", function(r){r.response?callback(r):self.handleError(r.error.error_msg);})
+getJSONP("https://api.vk.com/method/users.get?user_ids="+user+"&fields=photo_400_orig&v=5.57", function(r){r.response?self.processUserData(r):console.log(r);})
+
+d3.select('body').append('div').attr('class', 'loadingMessage').append('div').append('h1').text("Подождите, идет загрузка ...");
+
+
+function callback (response){
+
+  self.response = response;
+
+  d3.select('.loadingMessage').remove();
+
+   d3.select("#info").text(null);
+
+  
+  //create a grid of dates from timeRange[0] to timeRange[1];
+
+var timeGrid = self.calculateTimeGrid();
+
+
+
+    
+   var y = d3.scaleLinear().domain(d3.extent(timeGrid, function(d){return d.postCount;})).range([h, 0]),
+    x = d3.scaleTime().domain(d3.extent(timeGrid, function(d){return d.date;})).range([0, w]);
+
+    
+
+
+         var voronoi = d3.voronoi()
+    .extent([[-1, -1], [w + 1, h + 1]])
+    .x(function(d){return x(d.date);})
+    .y(function(d){return y(d.postCount);});
+
+    
+
+    var line = d3.line()
+        .x(function(d,i) { return x(d.date); })
+        .y(function(d) { return y(d.postCount); })
+
+    g.append('g').attr('id','mainline').append("path").datum(timeGrid).attr("d", line);
+
+    g.append('g').attr('class', 'axis axis--x')
+    .attr('transform', 'translate('+ 0+ ","+(h+padding)+")").call(d3.axisBottom(x).ticks(6));
+
+    g.append('g').attr('class', 'axis axis--y')
+    .attr('transform', 'translate('+ (-padding)+ ","+0+")").call(d3.axisLeft(y).ticks(6));
+
+    var focus = g.append("g")
+      .attr("transform", "translate(-100,-100)")
+      .attr("class", "focus");
+
+      focus.append("circle")
+      .attr("r", 3);
+
+  focus.append("text")
+      .attr("y", -10);
+
+    var polygon = g.append("g")
+    .attr("class", "polygons")
+  .selectAll("path")
+  .data(voronoi.polygons(timeGrid))
+  .enter().append("path")
+    .attr("d", function(d) {return d ? "M" + d.join("L") + "Z" : null; })
+    .on("mouseover", mouseover)
+      .on("mouseout", mouseout);
+
+
+      function mouseover(d) {
+
+        var textAnchor;
+
+        if(x(d.data.date)>300){
+          textAnchor = 'end';
+        }else{
+          textAnchor = 'start';
+        }
+
+        focus.attr("transform", "translate(" + x(d.data.date) + "," + y(d.data.postCount) + ")");
+
+        if(self.interval==="day"){
+
+    focus.select("text").text(d3.timeFormat("%Y-%m-%d")(d.data.date) + " было "+ d.data.postCount + " постов")
+    .style('text-anchor', textAnchor);
+
+
+        }
+
+        if(self.interval==="week"){
+
+          var d0 = new Date(d.data.date);
+          d0.setDate(d0.getDate() - d0.getDay());
+
+    focus.select("text").text("С "+ d3.timeFormat("%Y-%m-%d")(d0) + " по "+ d3.timeFormat("%Y-%m-%d")(d.data.date) + " было "+ d.data.postCount + " постов")
+    .style('text-anchor', textAnchor);
+
+
+        }
+
+        if(self.interval==="4weeks"){
+
+          var d0 = new Date(d.data.date);
+          d0.setDate(d0.getDate() - 3*7 - d0.getDay());
+
+    focus.select("text").text("С "+ d3.timeFormat("%Y-%m-%d")(d0) + " по "+ d3.timeFormat("%Y-%m-%d")(d.data.date) + " было "+ d.data.postCount + " постов")
+    .style('text-anchor', textAnchor);
+
+
+        }
+        
+      }
+
+      function mouseout(d) {
+    focus.attr("transform", "translate(-100,-100)").select('text').text('');
+      }
+
+
+
+
+
+
+}
+
+
+  },
+
+   draw: function(e){
+
+    var self = this;
+
+    var user;
+
+    if(e&&e.target){
+      user = e.target.value;
+    } else {
+        user =e;
+      }
+
+
+getJSONP("https://api.vk.com/method/wall.get?owner_id="+user+"&v=5.57", function(r){console.log(r);r.response?callback(r):self.handleError(r.error.error_msg);});
+getJSONP("https://api.vk.com/method/users.get?user_ids="+user+"&fields=photo_400_orig&v=5.57", function(r){r.response?self.processUserData(r):console.log(r);})
+
+d3.select('body').append('div').attr('class', 'loadingMessage').append('div').append('h1').text("Подождите, идет загрузка ...");
+
+
+function callback (response){
+
+  self.response = response;
+
+  d3.select('.loadingMessage').remove();
+
+  d3.select("#info").text(null);
+
+  self.updateChart();
+
+}
+
+},
+
+handleError: function(e){
+
+  d3.select('.loadingMessage').remove();
+  this.appendInfo(e);
+  d3.select('#chart').style('visibility', 'hidden');
+
+
+},
+
+calculateTimeGrid: function(){
+
+  var self = this;
+
+  var data = self.response.response.items.map(function(d){
+
+    var d1={};
+
+    d1.date = new Date(d.date*1000);
+
+    return d1;
+
+    ;});
+
+  data.sort(function(a,b){return a.date-b.date;});
+
+  var timeRange = d3.extent(data, function(d){return d.date;});
+
+if(self.interval==="day"){
+
+timeRange.forEach(function(d,i){
+
+    i===0?
+    d.setTime(new Date(d.getFullYear(), d.getMonth(), d.getDate()-1, 23, 59,59, 999)):
+    d.setTime(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59,59, 999));
+
+  });
+
+  var timeGrid = [];
+
+  for (var i=1;i<=Math.ceil((timeRange[1]- timeRange[0])/(24*60*60*1000));++i){
+
+    timeGrid.push({date: new Date(timeRange[0]), postCount:0});
+
+
+
+  }
+
+var _d=timeGrid[0];
+
+  timeGrid.forEach(function(d,i){
+
+    d.date.setDate(d.date.getDate()+i);
+
+    var bisector = d3.bisector(function(d){return d.date}).left;
+
+    i>=1?(d.postCount=bisector(data, d.date)-bisector(data, _d.date)):'';
+
+    _d=d;
+
+
+  });
+}
+
+
+if (self.interval === "week"){
+
+  timeRange.forEach(function(d,i){
+
+    i===0?
+    d.setTime(new Date(d.getFullYear(), d.getMonth(), d.getDate()-d.getDay()-1, 23, 59,59, 999)):
+    d.setTime(new Date(d.getFullYear(), d.getMonth(), d.getDate()+(6 - d.getDay()), 23, 59,59, 999));
+
+  });
+
+
+  var timeGrid = [];
+
+  for (var i=1;i<=Math.ceil((timeRange[1]- timeRange[0])/(7*24*60*60*1000));++i){
+
+    timeGrid.push({date: new Date(timeRange[0]), postCount:0});
+
+  }
+
+var _d=timeGrid[0];
+
+  timeGrid.forEach(function(d,i){
+
+    d.date.setDate(d.date.getDate()+i*7);
+
+    var bisector = d3.bisector(function(d){return d.date}).left;
+
+    i>=1?(d.postCount=bisector(data, d.date)-bisector(data, _d.date)):'';
+
+    _d=d;
+
+  });
+
+
+}
+
+if (self.interval === "4weeks"){
+
+  timeRange.forEach(function(d,i){
+
+    i===0?
+    d.setTime(new Date(d.getFullYear(), d.getMonth(), d.getDate()-d.getDay()-1, 23, 59,59, 999)):
+    d.setTime(new Date(d.getFullYear(), d.getMonth(), d.getDate()+(6 - d.getDay()), 23, 59,59, 999));
+
+  });
+
+
+  var timeGrid = [];
+
+  for (var i=1;i<=Math.ceil((timeRange[1]- timeRange[0])/(7*4*24*60*60*1000));++i){
+
+    timeGrid.push({date: new Date(timeRange[0]), postCount:0});
+
+  }
+
+var _d=timeGrid[0];
+
+  timeGrid.forEach(function(d,i){
+
+    d.date.setDate(d.date.getDate()+i*7*4);
+
+    var bisector = d3.bisector(function(d){return d.date}).left;
+
+    i>=1?(d.postCount=bisector(data, d.date)-bisector(data, _d.date)):'';
+
+    _d=d;
+
+  });
+
+
+}
+
+self.timeGrid = timeGrid;
+
+return timeGrid;
+
+
+
+},
+
+updateChart: function() {
+
+  var self = this;
+
+  var timeGrid = self.calculateTimeGrid();
+
+
+  var margin = 40,
+    padding = 0.2*margin,
+    w = 600 - margin*2,
+    h = 400 - margin*2,
+    y = d3.scaleLinear().domain(d3.extent(timeGrid, function(d){return d.postCount;})).range([h, 0]),
+    x = d3.scaleTime().domain(d3.extent(timeGrid, function(d){return d.date;})).range([0, w]);
+
+
+    var line = d3.line()
+        .x(function(d,i) { return x(d.date); })
+        .y(function(d) { return y(d.postCount); });
+
+        d3.select('#chart').style('visibility', null);
+
+    d3.select("#mainline").select('path').datum(timeGrid).transition().attr("d", line);
+
+    d3.select('.axis--x')
+    .transition().call(d3.axisBottom(x).ticks(6));
+
+    d3.select('.axis--y')
+    .transition().call(d3.axisLeft(y).ticks(6));
+
+
+d3.selectAll(".polygons").remove();
+
+var voronoi = d3.voronoi()
+    .extent([[-1, -1], [w + 1, h + 1]])
+    .x(function(d){return x(d.date);})
+    .y(function(d){return y(d.postCount);});
+
+
+    var polygon = self.g.append("g")
+    .attr("class", "polygons")
+  .selectAll("path")
+  .data(voronoi.polygons(timeGrid))
+  .enter().append("path")
+    .attr("d", function(d) {return d ? "M" + d.join("L") + "Z" : null; })
+    .on("mouseover", mouseover)
+      .on("mouseout", mouseout);
+
+      var focus= d3.select(".focus");
+
+      focus.attr("transform", "translate(-100,-100)");
+
+
+      function mouseover(d) {
+
+        var textAnchor;
+
+        if(x(d.data.date)>300){
+          textAnchor = 'end';
+        }else{
+          textAnchor = 'start';
+        }
+
+
+        focus.attr("transform", "translate(" + x(d.data.date) + "," + y(d.data.postCount) + ")");
+
+        if(self.interval==="day"){
+
+    focus.select("text").text(d3.timeFormat("%Y-%m-%d")(d.data.date) + " было "+ d.data.postCount + " постов")
+    .style('text-anchor', textAnchor);;
+
+
+        }
+
+        if(self.interval==="week"){
+
+          var d0 = new Date(d.data.date);
+          d0.setDate(d0.getDate() - d0.getDay());
+
+    focus.select("text").text("С "+ d3.timeFormat("%Y-%m-%d")(d0) + " по "+ d3.timeFormat("%Y-%m-%d")(d.data.date) + " было "+ d.data.postCount + " постов")
+    .style('text-anchor', textAnchor);;
+
+
+        }
+
+        if(self.interval==="4weeks"){
+
+          var d0 = new Date(d.data.date);
+          d0.setDate(d0.getDate() - 3*7 - d0.getDay());
+
+    focus.select("text").text("С "+ d3.timeFormat("%Y-%m-%d")(d0) + " по "+ d3.timeFormat("%Y-%m-%d")(d.data.date) + " было "+ d.data.postCount + " постов")
+    .style('text-anchor', textAnchor);;
+
+
+        }
+
+      }
+
+       function mouseout(d) {
+    focus.attr("transform", "translate(-100,-100)").select('text').text('');
+      }
+    }
+}
+
+
+
+var chart = new Chart;
+
+chart._draw(1);
+
+
+document.getElementById('owner_id').addEventListener('change', function(e){chart.draw(e)});
+
+
+
+
+    </script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  </body>
+</html>
