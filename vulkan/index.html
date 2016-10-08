@@ -76,10 +76,14 @@ Chart.prototype =
   },
 
   processUserData: function(response){
+
    this.image
     .attr('xlink:href', response.response[0].photo_400_orig);
 
-    this.userInfo.text(response.response[0].first_name+" "+response.response[0].last_name);
+    this.userInfo
+    .attr('href', 'https://vk.com/id'+this.user)
+    .attr('target', '_blank')
+    .text(response.response[0].first_name+" "+response.response[0].last_name);
 
   },
 
@@ -92,7 +96,7 @@ Chart.prototype =
     w = 600 - margin*2,
     h = 400 - margin*2;
 
-    var userInfo = d3.select(".jumbotron").append('div').attr('id', 'user-info').append('h3');
+    var userInfo = d3.select(".jumbotron").append('div').attr('id', 'user-info').append('h3').append('a');
 
     self.userInfo = userInfo;
 
