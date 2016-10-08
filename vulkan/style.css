@@ -1,0 +1,101 @@
+.container {
+      width: auto;
+      max-width: 680px;
+      padding: 0 15px;
+      }
+      .container .text-muted {
+      margin: 20px 0;
+      }
+
+      /* d3 */
+      #mainline {
+          stroke: steelblue;
+          stroke-width: 3;
+          fill: none;
+      }
+
+      line {
+          stroke: black;
+      }
+
+      text {
+          font-family: Arial;
+          font-size: 9pt;
+      }
+
+      .svg-container {
+          display: inline-block;
+          position: relative;
+          width: 100%;
+          padding-bottom: 100%; /* aspect ratio */
+          vertical-align: top;
+          overflow: hidden;
+      }
+      .svg-content-responsive {
+          display: inline-block;
+          position: absolute;
+          top: 10px;
+          left: 0;
+      }
+
+      #info{
+        color: red;
+      }
+
+      .axis path{
+        stroke: black;
+        stroke-width:1;
+      }
+
+      .interval{
+        border: solid;
+        padding: 3px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .interval.active{
+        color: #E91E63;
+      }
+
+      .interval:hover{
+        color: #E91E63;
+      }
+
+      .loadingMessage{
+        position: fixed;
+        top:0px;
+        left:0px;
+        width:100%;
+        height:100%;
+        background: grey;
+        opacity: 0.5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .loadingMessage>div{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+
+
+      .polygons {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus{
+  fill: #E91E63;
+}
+
+.focus text{
+  fill: black;
+}
+
+#user-info{
+  display:flex;
+  justify-content: center;
+}
