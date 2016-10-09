@@ -53,6 +53,5 @@ function processInput(value) {
 		a = Math.floor(Math.random()*100+1);
 		count = 0;
 		guesses = [];
-		guess = -1;
 	}
 }
