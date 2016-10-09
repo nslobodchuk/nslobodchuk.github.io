@@ -1,0 +1,98 @@
+div.github-user-list.user-list-container{
+	display: flex;
+	flex-direction: column;
+}
+
+div.github-user-list.user-list-container-inner{
+	display: flex;
+	flex-direction: column;
+}
+
+div.github-user-list.pagination {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 5px;
+	margin-top: 10px;
+}
+
+p.github-user-list.pagination {
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+span.github-user-list.pagination {
+	padding: 5px;
+	margin-left: 5px;
+	color: #3F51B5;
+}
+
+span.github-user-list.pagination:not(.dots) {
+	border: solid;
+	border-radius: 5px;
+	border-width: 1px;
+	cursor: pointer;
+}
+
+span.github-user-list.pagination.active {
+	cursor: default;
+	color: #E91E63;
+}
+
+span.github-user-list.pagination:hover{
+	color: #E91E63;
+}
+
+a.github-user-list {
+	display: flex;
+	color: #3F51B5;
+	text-decoration: none;
+	margin-top: 5px;
+	border: solid;
+	border-width: 1px;
+	border-radius: 10px;
+}
+
+a.github-user-list:hover {
+	color: #E91E63;
+}
+
+a.github-user-list img {
+	border-radius: 10px;
+	margin:2px;
+	transition-duration:1s;
+}
+
+a.github-user-list:hover img{
+	color: #E91E63;
+	margin-left:5px;
+}
+
+a.github-user-list p {
+	margin-left: 20px;
+}
+
+input.github-user-list {
+	border: solid;
+	border-color: #3F51B5;
+	border-width: 1px;
+	border-radius: 10px;
+	height: 25px;
+	font-size: 100%;
+	padding-left: 10px;
+	transition: padding-left 1s;
+}
+
+input.github-user-list:hover:not(:focus){
+	padding-left: 20px;
+	border-color: #E91E63;
+}
+
+input.github-user-list:focus{
+	outline: none;
+	border:solid;
+	border-width: 1px;
+	border-color: #E91E63;
+}
+
+
+

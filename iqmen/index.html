@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	    <link rel="stylesheet" href="github-user-list.css">
+	    <script src="github-user-list.js"></script>
+
+	    <style>
+	    	#append-here{
+	    		width: 400px;
+	    		margin: 30px;
+	    	}
+	    	#append-here2{
+	    		width: 500px;
+	    		margin: 30px;
+	    	}
+	    	#append-here3{
+	    		width: 400px;
+	    		margin: 30px;
+	    	}
+	    	#container{
+	    		display: flex;
+	    	}
+	    </style>
+</head>
+<body>
+	<div id="container">
+		<div id="append-here"></div>
+		<div id="append-here2"></div>
+		<div id="append-here3"></div>
+	</div>
+
+<script>
+var git = new GithubUserList(document.getElementById("append-here"), "foo");
+var git2 = new GithubUserList(document.getElementById("append-here2"), "bar");
+var git3 = new GithubUserList(document.getElementById("append-here3"), "nslobodchuk");
+
+</script>
+</body>
