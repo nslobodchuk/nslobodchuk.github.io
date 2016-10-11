@@ -1,16 +1,49 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+
 <head>
-	    <link rel="stylesheet" href="style.css">
-	    
+<meta charset="utf-8">
+<script src="//d3js.org/d3.v4.min.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="style.css">
+
 </head>
+
+
 <body>
-	
-	<div class="container-outer">
-			<h1>Guess a number from 1 to 100</h1>
-			<input placeholder="Make a guess">
-			<p class="button">Check you answer</p>
-			<p class="feedback"></p>
-	</div>
-<script src="script.js"></script>
+  <div id="header">
+    <h3>Nikolay Slobodchuk</h3>
+  </div>
+  <div class="body-content">
+    <div class="introtext">
+    <div class="intro">
+    <p>Hi! My name is <b>Nikolay Slobodchuk</b>.</p>
+  </div>
+  <div class="intro">
+    <p>I do data analysis, data visualization, and programming. I mostly work with financial datasets and economic data.</p>
+  </div>
+  </div>
+    <div id="container" >
+      
+        <div id="section1" class="section"><h1>Data analsysis</h1></div>
+        <div id="section2" class="section">
+        <h1>Data visualization</h1>
+              <a href="http://bl.ocks.org/nslobodchuk">http://bl.ocks.org/nslobodchuk</a>
+        </div>
+        <div id="section3" class="section"><h1>Programming</h1></div>
+        <div id="section4" class="section"><h1>Finance</h1></div>
+      
+        <div id="graph"></div>
+    </div>
+    <div id="contacts">
+      <p>Get in touch: <b>nickslobodchuk[at]gmail.com</b> or <a href="https://ru.linkedin.com/in/nikolay-slobodchuk-12a392ab">LinkedIn</a></p>
+      
+      
+
+    </div>
+  </div>
+  <script src="scroll.js"></script>
+  <script src="circlePack.js"></script>
+  <script src="story.js"></script>
+  
 </body>
+
