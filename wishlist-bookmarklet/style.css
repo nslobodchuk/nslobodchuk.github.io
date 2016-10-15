@@ -1,0 +1,258 @@
+iframe.wishlist-bookmarklet{
+	display: none;
+}
+
+.bla-bla-class{
+	z-index: 9999;
+}
+
+.wishlist-bookmarklet.overlay{
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	top:0;
+	left:0;
+	background-color: rgba(0,0,0,0.3);
+}
+
+.wishlist-bookmarklet.button.launch{
+	position: fixed;
+	right:20px;
+	bottom:160px;
+	width: 30px;
+	height:30px;
+	border-radius: 40px;
+	padding:10px;
+}
+
+.wishlist-bookmarklet.button.list{
+	position: fixed;
+	right:20px;
+	bottom:100px;
+	width: 30px;
+	height:30px;
+	border-radius: 40px;
+	padding:10px;
+}
+
+.wishlist-bookmarklet.button.cancel{
+	position: fixed;
+	right:20px;
+	bottom:40px;
+	width: 30px;
+	height:30px;
+	border-radius: 40px;
+	padding:10px;
+}
+
+input.wishlist-bookmarklet{
+	border: solid;
+	border-color: #3F51B5;
+	border-width: 1px;
+	border-radius: 10px;
+	height: 25px;
+	font-size: 100%;
+	padding-left: 10px;
+	text-align: center;
+}
+
+input.wishlist-bookmarklet:hover{
+	border-color: #E91E63;
+}
+
+input.wishlist-bookmarklet:focus{
+	outline: none;
+	border:solid;
+	border-width: 1px;
+	border-color: #E91E63;
+}
+
+textarea.wishlist-bookmarklet{
+	border: solid;
+	border-color: #3F51B5;
+	border-width: 1px;
+	border-radius: 10px;
+	height: 25px;
+	font-size: 100%;
+	padding-left: 10px;
+	text-align: center;
+}
+
+textarea.wishlist-bookmarklet:hover{
+	border-color: #E91E63;
+}
+
+textarea.wishlist-bookmarklet:focus{
+	outline: none;
+	border:solid;
+	border-width: 1px;
+	border-color: #E91E63;
+}
+
+.wishlist-bookmarklet.form {
+	background-color: rgba(256,256,256,1);
+	width:500px;
+	height:500px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	filter: drop-shadow(10px 10px 20px black);
+	border-radius: 20px;
+}
+
+.wishlist-bookmarklet.form-field {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin:5px;
+	width: 300px;
+}
+
+
+.wishlist-bookmarklet.button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 3px;	
+	border-radius: 100px;
+	cursor: pointer;
+	border:none;
+	background-color: rgba(256,256,256,1);
+	filter: drop-shadow(3px 3px 5px black);
+}
+
+.wishlist-bookmarklet.button:hover{
+	color: #E91E63;
+	filter: drop-shadow(3px 3px 7px black);
+}
+
+.wishlist-bookmarklet.form-field .button {
+	margin-left: 5px;
+	width:20px;
+	height:20px;
+}
+
+
+
+.wishlist-bookmarklet .button.add-new-item {
+
+	margin-top: 40px;
+	width:200px;
+	height:20px;
+}
+
+.wishlist-bookmarklet.form-field .input {
+	width: 100%;
+	height: 20px;
+	border-radius: 20px;
+}
+
+.wishlist-bookmarklet.form-field textarea.input {
+	width: 100%;
+	height: 50px;
+	max-height: 200px;
+}
+
+.wishlist-bookmarklet.form-field.tags .input {
+	height: 20px;
+}
+
+
+
+.wishlist-bookmarklet-document-images{
+	cursor: pointer;
+}
+
+.wishlist-bookmarklet-document-images:hover{
+	filter: drop-shadow(0px 0px 40px #E91E63);
+}
+
+.wishlist-bookmarklet.hidden{
+	display: none;
+}
+
+/*List*/
+
+.wishlist-bookmarklet.list:not(.button):not(.selected-item) {
+	width:500px;
+	height:100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+
+	
+}
+
+.wishlist-bookmarklet.pagination{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	height: 100px;
+	padding:5px;
+	filter: drop-shadow(10px 10px 20px black);
+	background-color: rgba(256,256,256,1);
+	border-radius: 20px;
+	padding: 20px;
+}
+
+.wishlist-bookmarklet.pagination-tab{
+	max-height: 100px;
+	max-width: 100px;
+}
+
+.wishlist-bookmarklet.pagination-container{
+	height: 100px;
+	width: 100px;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+input.wishlist-bookmarklet.filter{
+	height: 40px;
+	font-size: 30px;
+	width: 200px;
+	margin-bottom: 20px; 
+	filter: drop-shadow(10px 10px 20px black);
+	border-radius: 20px;
+}
+
+.wishlist-bookmarklet.selected-item:not(.hidden){
+	background-color: rgba(256,256,256,1);
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	filter: drop-shadow(10px 10px 20px black);
+	width:500px;
+	height:500px;
+	margin-bottom: 100px;
+}
+
+.wishlist-bookmarklet.selected-item > img {
+	max-width: 300px;
+	max-height: 300px;
+}
+
+.wishlist-bookmarklet .button.delete-item {
+
+	margin-top: 40px;
+	width:200px;
+	height:20px;
+}
+
+.wishlist-bookmarklet img{
+
+	filter: drop-shadow(10px 10px 20px black);
+
+}
