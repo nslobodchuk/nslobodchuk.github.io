@@ -62,6 +62,7 @@ TitleField.setAttribute('class', 'wishlist-bookmarklet form-field title');
 
 var TitleInput = document.createElement('input');
 TitleInput.setAttribute('class', 'wishlist-bookmarklet input');
+TitleInput.setAttribute('placeholder', 'Type in the title of the item');
 
 var TitleSelect = document.createElement('div');
 TitleSelect.setAttribute('class', 'wishlist-bookmarklet button select-in-document');
@@ -76,6 +77,7 @@ ImageField.setAttribute('class', 'wishlist-bookmarklet form-field image');
 
 var ImageInput = document.createElement('input');
 ImageInput.setAttribute('class', 'wishlist-bookmarklet input');
+ImageInput.setAttribute('placeholder', 'Type in image url');
 
 var ImageSelect = document.createElement('div');
 ImageSelect.setAttribute('class', 'wishlist-bookmarklet button select-in-document');
@@ -90,6 +92,7 @@ CommentField.setAttribute('class', 'wishlist-bookmarklet form-field comment');
 
 var CommentInput = document.createElement('textarea');
 CommentInput.setAttribute('class', 'wishlist-bookmarklet input');
+CommentInput.setAttribute('placeholder', 'Type in a comment');
 
 var CommentSelect = document.createElement('div');
 CommentSelect.setAttribute('class', 'wishlist-bookmarklet button select-in-document');
