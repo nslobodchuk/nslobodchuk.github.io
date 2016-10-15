@@ -6,18 +6,14 @@
 
 
 	<h1>Bookmarklet will go here</h1>
-	
+
 <script>
 
 if(!localStorage.WishlistBookmarkletData){
 	localStorage.WishlistBookmarkletData = JSON.stringify({});
 }
 
-window.addEventListener('onload', sendMessage);
-
-function sendMessage(){
-	window.parent.postMessage(localStorage.WishlistBookmarkletData, '*');
-}
+window.parent.postMessage(localStorage.WishlistBookmarkletData, '*');
 
 
 window.addEventListener('onmessage', receiveMessage);
