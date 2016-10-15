@@ -13,12 +13,15 @@ if(!localStorage.WishlistBookmarkletData){
 	localStorage.WishlistBookmarkletData = JSON.stringify({});
 }
 
+console.log('loaded');
+
 window.parent.postMessage(localStorage.WishlistBookmarkletData, '*');
 
 
-window.addEventListener('onmessage', receiveMessage);
+window.addEventListener('message', receiveMessage);
 
 function receiveMessage(e){
+	console.log('iframe received message');
 	localStorage.WishlistBookmarkletData = e.data;
 }
 
