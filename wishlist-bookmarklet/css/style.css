@@ -236,12 +236,12 @@ input.wishlist-bookmarklet.filter{
 	filter: drop-shadow(10px 10px 20px black);
 	width:500px;
 	height:500px;
-	margin-bottom: 100px;
+	margin-bottom: 30px;
 }
 
 .wishlist-bookmarklet.selected-item > img {
-	max-width: 300px;
-	max-height: 300px;
+	max-width: 200px;
+	max-height: 200px;
 }
 
 .wishlist-bookmarklet .button.delete-item {
