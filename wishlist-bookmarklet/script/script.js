@@ -308,6 +308,7 @@ function selectImage(input){
 
 
 	selectImage.storeImage = function(e){
+		e.preventDefault();
 		input.value = e.target.src;
 		if (documentImages.length>0){
 			for (var i=0; i<documentImages.length; ++i){
