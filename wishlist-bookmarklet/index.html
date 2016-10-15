@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+</head>
+<body>
+
+
+	<h1>Bookmarklet will go here</h1>
+	
+<script>
+
+if(!localStorage.WishlistBookmarkletData){
+	localStorage.WishlistBookmarkletData = JSON.stringify({});
+}
+
+window.addEventListener('onload', sendMessage);
+
+function sendMessage(){
+	window.parent.postMessage(localStorage.WishlistBookmarkletData, '*');
+}
+
+
+window.addEventListener('onmessage', receiveMessage);
+
+function receiveMessage(e){
+	localStorage.WishlistBookmarkletData = e.data;
+}
+
+</script>
+</body>
